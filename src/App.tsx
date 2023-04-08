@@ -94,7 +94,7 @@ function App() {
                 callBack={setValue}
                 changeMinValue={changeMinValue}
                 changeMaxValue={changeMaxValue}
-
+                error={error}
                 num={num}
                 maxValue={maxValue}
                 minValue={minValue}

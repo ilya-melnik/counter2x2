@@ -32,12 +32,12 @@ const CounterDisplay: FC<CounterDisplayType> = ({
     // let [localError, setLocalError] = useState(false)
 
     const localErrorClassCondition = num >= maxValue || error === 'incorrectValue' ? styleError : styleError
-
+// выполняеться условие на второй раз по нажатию (окраска maxValue to red)
     return (
         <Wrapper>
             <Screen_Wrapper>
                 <Number  localError={localErrorClassCondition}>{error ? errorText[error] : num} </Number>
-                {/*<Number error={num >=maxValue? !error: error }>{ num} </Number>*/}
+
             </Screen_Wrapper>
             <Btn_Wrapper>
                 <Button disabled={error === 'incorrectValue' || styleError } name={'inc'} callBack={functionInc}/>

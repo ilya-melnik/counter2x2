@@ -1,14 +1,17 @@
 import React, {ChangeEvent, FC} from 'react';
 import styled from "styled-components";
 import Button from "./Button";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
+import {errorTextType, ErrorType} from "./App";
 
 
 type SettingDisplayType = {
-
-    num:number
-    minValue:number
-    maxValue:number
-    disabled:boolean
+    error: ErrorType
+    num: number
+    minValue: number
+    maxValue: number
+    disabled: boolean
     callBack: () => void
     changeMinValue: (value: number) => void
     changeMaxValue: (value: number) => void
@@ -17,7 +20,17 @@ type SettingDisplayType = {
 }
 
 
-const SettingDisplay: FC<SettingDisplayType> = ({setDisabled, callBack, changeMinValue, changeMaxValue, num,maxValue,minValue,disabled}) => {
+const SettingDisplay: FC<SettingDisplayType> = ({
+                                                    setDisabled,
+                                                    callBack,
+                                                    changeMinValue,
+                                                    changeMaxValue,
+                                                    num,
+                                                    maxValue,
+                                                    minValue,
+                                                    disabled,
+                                                    error
+                                                }) => {
 
     const getMinValue = (e: ChangeEvent<HTMLInputElement>) => {
         let minCurrentValue = +e.currentTarget.value
@@ -33,8 +46,9 @@ const SettingDisplay: FC<SettingDisplayType> = ({setDisabled, callBack, changeMi
         <Wrapper>
             <Screen_Wrapper>
                 {/*// do i need create component Input ?*/}
-                <Span> maxValue: <Input value={maxValue} type={"number"} onChange={getMaxValue}/></Span>
-                <Span > minValue:  <Input value={minValue} type={"number"} onChange={getMinValue}/></Span>
+                <Span> maxValue: <Input error={error === 'incorrectValue'} value={maxValue} type={"number"}
+                                        onChange={getMaxValue}/></Span>
+                <Span> minValue: <Input error={error === 'incorrectValue'} value={minValue} type={"number"} onChange={getMinValue}/></Span>
             </Screen_Wrapper>
 
             <Btn_Wrapper>
@@ -47,12 +61,14 @@ const SettingDisplay: FC<SettingDisplayType> = ({setDisabled, callBack, changeMi
 
 export default SettingDisplay;
 type InputType = {
-
+    error: boolean
 }
 const Input = styled.input<InputType>`
- //border: 1.5px solid red;
- // background-color: rosybrown;
-  
+  border: ${({error}) => error ?
+          '2px solid red; ' +
+          'background-color: rosybrown;':
+          ''}
+
 `
 const Span = styled.span`
   color: #61dafb;
