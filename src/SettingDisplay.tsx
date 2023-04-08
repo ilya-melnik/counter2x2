@@ -4,6 +4,7 @@ import Button from "./Button";
 
 
 type SettingDisplayType = {
+
     num:number
     minValue:number
     maxValue:number
@@ -11,22 +12,18 @@ type SettingDisplayType = {
     callBack: () => void
     changeMinValue: (value: number) => void
     changeMaxValue: (value: number) => void
-    setError: (bool: boolean) => void
+
     setDisabled: (bool: boolean) => void
 }
 
 
-const SettingDisplay: FC<SettingDisplayType> = ({setDisabled, callBack, changeMinValue, changeMaxValue, setError, num,maxValue,minValue,disabled}) => {
+const SettingDisplay: FC<SettingDisplayType> = ({setDisabled, callBack, changeMinValue, changeMaxValue, num,maxValue,minValue,disabled}) => {
+
     const getMinValue = (e: ChangeEvent<HTMLInputElement>) => {
         let minCurrentValue = +e.currentTarget.value
-
         changeMinValue(minCurrentValue)
-
-
-
-
-
     }
+
     const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
         let maxCurrentValue = +e.currentTarget.value
         changeMaxValue(maxCurrentValue)

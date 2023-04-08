@@ -1,28 +1,47 @@
-import React, {FC, useState} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 import styled from "styled-components";
 import Button from "./Button";
-import {Simulate} from "react-dom/test-utils";
+import {errorTextType, ErrorType} from "./App";
 
 
 type CounterDisplayType = {
 
     num: number
-    maxValue:number
-    error: boolean
-    setError: (bool: boolean) => void
+    errorText: errorTextType
+    maxValue: number
+    error: ErrorType
+    disabled: boolean
+    // setError: (bool: boolean) => void
     functionInc: () => void
     functionRest: () => void
+    minValue: number
+    styleError:boolean
 }
-const CounterDisplay: FC<CounterDisplayType> = ({num, functionInc, functionRest, error,maxValue,setError}) => {
-    console.log(error, "ERROR")
+const CounterDisplay: FC<CounterDisplayType> = ({
+                                                    disabled,
+                                                    num,
+                                                    functionInc,
+                                                    functionRest,
+                                                    error,
+                                                    maxValue,
+                                                    errorText,
+                                                    minValue,
+                                                    styleError
+                                                }) => {
+
+    // let [localError, setLocalError] = useState(false)
+
+    const localErrorClassCondition = num >= maxValue || error === 'incorrectValue' ? styleError : styleError
+
     return (
         <Wrapper>
             <Screen_Wrapper>
-                <Number error={num >=maxValue? !error: error }>{num} </Number>
+                <Number  localError={localErrorClassCondition}>{error ? errorText[error] : num} </Number>
+                {/*<Number error={num >=maxValue? !error: error }>{ num} </Number>*/}
             </Screen_Wrapper>
             <Btn_Wrapper>
-                <Button disabled={num >= maxValue } name={'inc'} callBack={functionInc}/>
-                <Button name={'rest'} callBack={functionRest}/>
+                <Button disabled={error === 'incorrectValue' || styleError } name={'inc'} callBack={functionInc}/>
+                <Button disabled={error === 'incorrectValue'} name={'rest'} callBack={functionRest}/>
             </Btn_Wrapper>
         </Wrapper>
     );
@@ -30,12 +49,29 @@ const CounterDisplay: FC<CounterDisplayType> = ({num, functionInc, functionRest,
 
 export default CounterDisplay;
 type NumberType = {
-    error: boolean
+    // maxValue?: number
+    localError: boolean
+
 }
+
 const Number = styled.div<NumberType>`
-  color: ${({error})=>error?"red":'#61dafb'};
-  font-size: 113px;
+  color: ${({localError}) => localError ? "red" : '#61dafb'};
+  ${props => {
+
+    // @ts-ignore
+    // if (props.children[0] >= maxValue) {  при сравнивании с maxValue, выдает ошибку (нужно чтобы при maxValue кнопка увеличивалась)
+    //   return "font-size: 97px;"
+    // }  
+    // @ts-ignore
+    if (props.children[0] >= 0) {
+      return "font-size: 87px;"
+    } 
+    else {
+      return "font-size: 47px;"
+    }
+      }}
 `
+
 
 const Wrapper = styled.div`
   margin: 30px auto;

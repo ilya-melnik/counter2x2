@@ -5,26 +5,27 @@ import CounterDisplay from "./CounterDisplay";
 import SettingDisplay from "./SettingDisplay";
 
 
-type ErrorType = "valueError" | "settingError" | null
+
+export type ErrorType = 'setValue' | 'incorrectValue'  | null
+export type errorTextType = {
+    setValue: "enter values and press 'set'",
+    incorrectValue: "Incorrect value!"
+}
 function App() {
     let [num, setNum] = useState(0)
     let [minValue, setMinValue] = useState(0)
     let [maxValue, setMaxValue] = useState(5)
     let [error, setError] = useState<ErrorType>(null)
-    let [disabled, setDisabled] = useState<boolean>(true)
 
-    let displayState = "setText"
+    let [disabled, setDisabled] = useState<boolean>(true) //?
+    let [styleError, setStyleError] = useState<boolean>(false)
 
 
-    const errorText = {
-        valueError : "value vary Height",
-        settingError : "incorrect value"
-    }
 
-    const displayRenderText = {
-        "error" :  "incorrect value",
-        "counter" : minValue,
-        "setText" : "please press set"
+    const errorText:errorTextType = {
+        setValue: "enter values and press 'set'",
+        incorrectValue: "Incorrect value!",
+
     }
 
 
@@ -34,23 +35,27 @@ function App() {
             setNum(num => num + 1)
 
         }
-        if (num >= maxValue) {
+        if (num  >= maxValue) {
             setDisabled(true)
+            setStyleError(true)
         }
     }
     const functionRest = () => {
         setNum(minValue)
+        setStyleError(false)
     }
 
     const changeMinValue = (value: number) => {
-        if(value < 0){
+        if (value < 0 || value >= maxValue ) {
+            setStyleError(true)
             setMinValue(value)
-            setError('settingError')
             setDisabled(true)
+            setError('incorrectValue')
             return
         }
         else {
-            setError(null)
+            setStyleError(false)
+            setError('setValue')
             setMinValue(value)
             setDisabled(false)
         }
@@ -58,13 +63,29 @@ function App() {
 
     }
     const changeMaxValue = (value: number) => {
-        setMaxValue(value)
-        setDisabled(false)
+        if(value <= minValue || minValue < 0 && value > minValue ){
+            setStyleError(true)
+            setMaxValue(value)
+            setDisabled(true)
+            setError('incorrectValue')
+        }
+
+
+        else {
+            setStyleError(false)
+            setError('setValue')
+            setMaxValue(value)
+            setDisabled(false)
+        }
+
+
     }
 
     const setValue = () => {
         setNum(minValue)
         setDisabled(true)
+        setError(null)
+        setStyleError(false)
     }
     return (
         <div className="App">
@@ -73,19 +94,23 @@ function App() {
                 callBack={setValue}
                 changeMinValue={changeMinValue}
                 changeMaxValue={changeMaxValue}
-                setError={()=>{}}
+
                 num={num}
                 maxValue={maxValue}
                 minValue={minValue}
                 disabled={disabled}/>
 
-            {error ? errorText[error] : ''}
+            {/*{error? errorText[error]: ""}*/}
             <CounterDisplay num={num}
+                            styleError={styleError}
+                            errorText={errorText}
+                            disabled={disabled}
                             functionInc={functionInc}
                             functionRest={functionRest}
-                            error={false}
+                            error={error}
                             maxValue={maxValue}
-                            setError={()=>{}}/>
+                            minValue={minValue}
+                            />
 
 
         </div>
