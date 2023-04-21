@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CounterDisplay from "./CounterDisplay";
 import SettingDisplay from "./SettingDisplay";
 
 
-
-export type ErrorType = 'setValue' | 'incorrectValue'  | null
+export type ErrorType = 'setValue' | 'incorrectValue' | null
 export type errorTextType = {
     setValue: "enter values and press 'set'",
     incorrectValue: "Incorrect value!"
 }
+
 function App() {
     let [num, setNum] = useState(0)
     let [minValue, setMinValue] = useState(0)
@@ -21,21 +21,36 @@ function App() {
     let [styleError, setStyleError] = useState<boolean>(false)
 
 
-
-    const errorText:errorTextType = {
+    const errorText: errorTextType = {
         setValue: "enter values and press 'set'",
         incorrectValue: "Incorrect value!",
-
     }
 
 
-    const functionInc = () => {
+    //localStorage does work correctly
+    useEffect(() => {
+        let getValueFromStorage = localStorage.getItem('minValue')
+        if (getValueFromStorage) {
+            let newValueFromStorage = JSON.parse(getValueFromStorage)
+            setMinValue(newValueFromStorage)
+        }
 
+        let getValueFromStorage2 = localStorage.getItem('maxValue')
+        if (getValueFromStorage2) {
+            let newValueFromStorage2 = JSON.parse(getValueFromStorage2)
+            setMaxValue(newValueFromStorage2)
+        }
+    }, [])
+
+
+
+
+    const functionInc = () => {
         if (num >= minValue && num < maxValue) {    // нужно =<
             setNum(num => num + 1)
-
         }
-        if (num  >= maxValue) {
+
+        if (num >= maxValue) {
             setDisabled(true)
             setStyleError(true)
         }
@@ -46,14 +61,14 @@ function App() {
     }
 
     const changeMinValue = (value: number) => {
-        if (value < 0 || value >= maxValue ) {
+        if (value < 0 || value >= maxValue) {
             setStyleError(true)
             setMinValue(value)
             setDisabled(true)
             setError('incorrectValue')
+
             return
-        }
-        else {
+        } else {
             setStyleError(false)
             setError('setValue')
             setMinValue(value)
@@ -63,15 +78,12 @@ function App() {
 
     }
     const changeMaxValue = (value: number) => {
-        if(value <= minValue || minValue < 0 && value > minValue ){
+        if (value <= minValue || minValue < 0 && value > minValue) {
             setStyleError(true)
             setMaxValue(value)
             setDisabled(true)
             setError('incorrectValue')
-        }
-
-
-        else {
+        } else {
             setStyleError(false)
             setError('setValue')
             setMaxValue(value)
@@ -86,7 +98,12 @@ function App() {
         setDisabled(true)
         setError(null)
         setStyleError(false)
+
+        localStorage.setItem('minValueStorage', JSON.stringify(minValue))
+        localStorage.setItem('maxValue', JSON.stringify(maxValue))
     }
+
+
     return (
         <div className="App">
             <SettingDisplay
@@ -100,7 +117,7 @@ function App() {
                 minValue={minValue}
                 disabled={disabled}/>
 
-            {/*{error? errorText[error]: ""}*/}
+
             <CounterDisplay num={num}
                             styleError={styleError}
                             errorText={errorText}
@@ -110,7 +127,7 @@ function App() {
                             error={error}
                             maxValue={maxValue}
                             minValue={minValue}
-                            />
+            />
 
 
         </div>
@@ -118,3 +135,6 @@ function App() {
 }
 
 export default App;
+//need fix:  size error in counterDisplay
+// если в инпуте ошибка тот инпут и подчеркивать, если ошибка в 2 input  значит подчеркнуть 2
+//reuse input

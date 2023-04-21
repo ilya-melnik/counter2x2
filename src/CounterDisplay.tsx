@@ -15,7 +15,7 @@ type CounterDisplayType = {
     functionInc: () => void
     functionRest: () => void
     minValue: number
-    styleError:boolean
+    styleError: boolean
 }
 const CounterDisplay: FC<CounterDisplayType> = ({
                                                     disabled,
@@ -33,15 +33,16 @@ const CounterDisplay: FC<CounterDisplayType> = ({
 
     const localErrorClassCondition = num >= maxValue || error === 'incorrectValue' ? styleError : styleError
 // выполняеться условие на второй раз по нажатию (окраска maxValue to red)
+
     return (
         <Wrapper>
             <Screen_Wrapper>
-                <Number  localError={localErrorClassCondition}>{error ? errorText[error] : num} </Number>
+                <Number localError={localErrorClassCondition}>{error ? errorText[error] : num} </Number>
 
             </Screen_Wrapper>
             <Btn_Wrapper>
-                <Button disabled={error === 'incorrectValue' || styleError } name={'inc'} callBack={functionInc}/>
-                <Button disabled={error === 'incorrectValue'} name={'rest'} callBack={functionRest}/>
+                <Button disabled={error === 'incorrectValue' || error === 'setValue' || styleError} name={'inc'} callBack={functionInc}/>
+                <Button disabled={error === 'incorrectValue' || error === 'setValue'} name={'rest'} callBack={functionRest}/>
             </Btn_Wrapper>
         </Wrapper>
     );
@@ -49,7 +50,7 @@ const CounterDisplay: FC<CounterDisplayType> = ({
 
 export default CounterDisplay;
 type NumberType = {
-    // maxValue?: number
+    maxValue?: number
     localError: boolean
 
 }
@@ -57,19 +58,15 @@ type NumberType = {
 const Number = styled.div<NumberType>`
   color: ${({localError}) => localError ? "red" : '#61dafb'};
   ${props => {
-
     // @ts-ignore
-    // if (props.children[0] >= maxValue) {  при сравнивании с maxValue, выдает ошибку (нужно чтобы при maxValue кнопка увеличивалась)
-    //   return "font-size: 97px;"
-    // }  
-    // @ts-ignore
-    if (props.children[0] >= 0) {
-      return "font-size: 87px;"
-    } 
-    else {
-      return "font-size: 47px;"
+    if (props.children[0] >= 0 && !props.localError) {
+      return (
+              "font-size: 85px;"
+      )
+    } else {
+      return "font-size: 96px;"
     }
-      }}
+  }}
 `
 
 
