@@ -43,8 +43,6 @@ function App() {
     }, [])
 
 
-
-
     const functionInc = () => {
         if (num >= minValue && num < maxValue) {    // нужно =<
             setNum(num => num + 1)
@@ -138,3 +136,4 @@ export default App;
 //need fix:  size error in counterDisplay
 // если в инпуте ошибка тот инпут и подчеркивать, если ошибка в 2 input  значит подчеркнуть 2
 //reuse input
+// выполняеться условие на второй раз по нажатию (окраска maxValue to red)

@@ -1,8 +1,6 @@
 import React, {ChangeEvent, FC} from 'react';
 import styled from "styled-components";
 import Button from "./Button";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {errorTextType, ErrorType} from "./App";
 
 

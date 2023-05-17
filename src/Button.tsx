@@ -7,7 +7,7 @@ type ButtonType = {
     callBack: ()=> void
 }
 const Button: FC<ButtonType> = ({name, callBack,disabled,}) => {
-    // почему не меняеться background задисейбленой кнопки
+
 
     return (
         <Btn  disabled={disabled}  onClick={callBack}>
